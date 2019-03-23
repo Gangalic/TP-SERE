@@ -13,8 +13,8 @@ int		main(int ac, char **av)
 	int		connfd;
 	int		word_count;
 	char 	user[] = "admin";
-	char 	password[16] = "lI#546@3dfF4$p87";
-	char	buffer[16];
+	char 	password[5] = "lI#54";
+	char	buffer[5];
 	socklen_t addr_size;
 	struct sockaddr_in server;
 
@@ -51,28 +51,26 @@ int		main(int ac, char **av)
 	// Listen with max of 5 connections
 	listen(sockfd, 5);
 
+	// Connect to client
+	addr_size = sizeof(server);
+	connfd = accept(sockfd, (struct sockaddr*)&server, &addr_size);
+	if (connfd < 0)
+	{
+		write(1, "connection error\n", 17);
+		return (0);
+	}
+
 	while (1)
 	{
-		// Connect to client
-		addr_size = sizeof(server);
-		connfd = accept(sockfd, (struct sockaddr*)&server, &addr_size);
-		if (connfd < 0)
-		{
-			write(1, "connection error\n", 17);
-			return (0);
-		}
+		word_count = read(connfd, buffer, 255);
+		buffer[word_count] = '\0'; 
+		if (!strcmp(buffer, password))
+			write(connfd, "Welcome back admin!\n", 25);
 		else
-		{
-			word_count = read(connfd, buffer, 255);
-			buffer[word_count] = '\0'; 
-			if (!strcmp(buffer, password))
-				write(connfd, "Welcome back admin!\n", 25);
-			else
-				write(connfd, "Wrong password\n",15);
-		}
+			write(connfd, "Wrong password\n",15);
 		printf("Checker\n");
 		// Close the connections
-		close(connfd);
 	}
+	close(connfd);
 	return (0);
 }

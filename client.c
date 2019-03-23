@@ -32,13 +32,14 @@ int		main(int ac, char **av)
 	server.sin_port = htons(atoi(av[2]));
 	server.sin_addr.s_addr = inet_addr(av[1]);
 
+	// Attemp a connection
+	if (connect(sockfd, (struct sockaddr*)&server, sizeof(server)) < 0)
+	{
+		printf("error in connect\n");
+		return (0);
+	}
+
 	while(1){
-		// Attemp a connection
-		if (connect(sockfd, (struct sockaddr*)&server, sizeof(server)) < 0)
-		{
-			printf("error in connect\n");
-			return (0);
-		}
 		// Ask for the message
 		printf("Please enter admin's password: ");
 		bzero(buffer, 256);
@@ -50,7 +51,7 @@ int		main(int ac, char **av)
 		read(sockfd, buffer, 25);
 		buffer[10] = '\0';
 		printf("%s\n", buffer);
-		close(sockfd);
 	}
+	close(sockfd);
 	return (0);
 }
