@@ -5,8 +5,8 @@ Open 2 Terminal windows in this folder
 
 ### Step 2
 Compile both files:
-gcc -o server server.c
-gcc -o client client.c
+gcc -o server -fno-stack-protector -m32 -z execstack server.c
+gcc -o client -fno-stack-protector -m32 -z execstack client.c
 
 ### Step 3
 In one terminal:

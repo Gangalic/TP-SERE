@@ -7,10 +7,12 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+#define PASS_SIZE 5
+
 int		main(int ac, char **av)
 {
 	int sockfd;
-	char buffer[256];
+	char buffer[PASS_SIZE];
 	struct sockaddr_in server;
 
 	if (ac != 3)

@@ -7,14 +7,16 @@
 #include <unistd.h>
 #include <string.h>
 
+#define PASS_SIZE 5
+
 int		main(int ac, char **av)
 {
-	int		sockfd;
-	int		connfd;
-	int		word_count;
+	int	sockfd;
+	int	connfd;
+	int	word_count;
 	char 	user[] = "admin";
-	char 	password[5] = "lI#54";
-	char	buffer[5];
+	char 	password[PASS_SIZE] = "lI#54";
+	char	buffer[PASS_SIZE];
 	socklen_t addr_size;
 	struct sockaddr_in server;
 
@@ -62,6 +64,7 @@ int		main(int ac, char **av)
 
 	while (1)
 	{
+		// here to add the overflow
 		word_count = read(connfd, buffer, 255);
 		buffer[word_count] = '\0'; 
 		if (!strcmp(buffer, password))
