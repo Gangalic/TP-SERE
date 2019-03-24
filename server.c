@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <string.h>
 
-#define PASS_SIZE 5
+#define PASS_SIZE 8
+typedef enum { false, true } bool;
 
 int		main(int ac, char **av)
 {
@@ -15,8 +16,9 @@ int		main(int ac, char **av)
 	int	connfd;
 	int	word_count;
 	char 	user[] = "admin";
-	char 	password[PASS_SIZE] = "lI#54";
+	char 	password[] = "lI#54";
 	char	buffer[PASS_SIZE];
+	bool 	logged = false;
 	socklen_t addr_size;
 	struct sockaddr_in server;
 
@@ -62,16 +64,17 @@ int		main(int ac, char **av)
 		return (0);
 	}
 
-	while (1)
+	while (!logged)
 	{
 		// here to add the overflow
 		word_count = read(connfd, buffer, 255);
 		buffer[word_count] = '\0'; 
-		if (!strcmp(buffer, password))
-			write(connfd, "Welcome back admin!\n", 25);
-		else
+		if (!strcmp(buffer, password)){
+			write(connfd, "Welcome back admin!\n", 20);
+			logged = true;
+		} else
 			write(connfd, "Wrong password\n",15);
-		printf("Checker\n");
+		//printf("New pass: %s  ---- Buffer: %s\n",password, buffer); //-> for checking
 		// Close the connections
 	}
 	close(connfd);

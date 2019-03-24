@@ -7,12 +7,13 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-#define PASS_SIZE 5
+typedef enum { false, true } bool;
 
 int		main(int ac, char **av)
 {
 	int sockfd;
-	char buffer[PASS_SIZE];
+	char buffer[256];
+	bool logged = false;
 	struct sockaddr_in server;
 
 	if (ac != 3)
@@ -41,7 +42,7 @@ int		main(int ac, char **av)
 		return (0);
 	}
 
-	while(1){
+	while(!logged){
 		// Ask for the message
 		printf("Please enter admin's password: ");
 		bzero(buffer, 256);
@@ -50,10 +51,13 @@ int		main(int ac, char **av)
 		
 		// Save the received message
 		bzero(buffer, 256);
-		read(sockfd, buffer, 25);
-		buffer[10] = '\0';
+		read(sockfd, buffer, 21);
+		if (!strcmp(buffer, "Welcome back admin!\n"))
+			logged = true;
+		buffer[20] = '\0';
 		printf("%s\n", buffer);
 	}
+	printf("Congrats!\nYou managed to finish the variable overflow challenge!\n\n");
 	close(sockfd);
 	return (0);
 }
